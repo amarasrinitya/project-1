@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            cursor: pointer;
+        }
+        .exam-details {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        a {
+            color: #2196F3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Exam Search</h1>
+
+    <input type="text" id="examInput" placeholder="Type exam name (e.g., upsc, rrbntpc, cat)">
+    <button onclick="searchExam()">Search Exam</button>
+
+    <div class="exam-details" id="examDetails">
+    </div>
+
+    <script>
+        const exams = {
+            "ssc": {
+                "fullForm": "Staff Selection Commission",
+                "description": "SSC conducts various recruitment exams for government jobs in India.",
+                "eligibility": "Graduates from any recognized university can apply. Age limits vary per exam.",
+                "tutors": [
+                    "https://www.youtube.com/@wifistudy",
+                    "https://www.youtube.com/@unacademy",
+                    "https://www.youtube.com/@adda247"
+                ]
+            },
+            "upsc": {
+                "fullForm": "Union Public Service Commission",
+                "description": "UPSC conducts the Civil Services Exam and other competitive exams for central government jobs.",
+                "eligibility": "Graduates aged between 21–32 years can apply. Relaxations apply for reserved categories.",
+                "tutors": [
+                    "https://www.youtube.com/@studyIQ",
+                    "https://www.youtube.com/@visionias",
+                    "https://www.youtube.com/@drishtiias"
+                ]
+            },
+            "gate": {
+                "fullForm": "Graduate Aptitude Test in Engineering",
+                "description": "GATE is an entrance exam for M.Tech, PhD admissions and PSU recruitment.",
+                "eligibility": "Engineering graduates or final year students can apply.",
+                "tutors": [
+                    "https://www.youtube.com/@nptelhrd",
+                    "https://www.youtube.com/@gateacademy",
+                    "https://www.youtube.com/@madeeasy"
+                ]
+            },
+            "rrbntpc": {
+                "fullForm": "Railway Recruitment Board - Non Technical Popular Categories",
+                "description": "These are various non-technical positions in Indian Railways (clerks, ticket checkers, typists).",
+                "eligibility": "Depending on the post, 12th pass or graduates, Age 18-30 years",
+                "tutors": [
+                    "https://www.youtube.com/@adda247",
+                    "https://www.youtube.com/@studyIQ",
+                    "https://www.youtube.com/@wifistudy",
+                    "https://www.youtube.com/@unacademy"
+                ]
+            },
+            "ibps": {
+                "fullForm": "Institute of Banking Personnel Selection",
+                "description": "Conducts recruitment exams for various banking posts like PO and Clerk",
+                "eligibility": "Graduates aged between 20–30 years can apply. Relaxations apply for reserved categories.",
+                "tutors": [
+                    "https://www.youtube.com/@adda247",
+                    "https://www.youtube.com/@Banking wallah",
+                    "https://www.youtube.com/@Oliveboard"
+                ]
+            },
+            "sbi": {
+                "fullForm": "State Bank Of India",
+                "description": "The SBI conducts recruitment for positions like Probationary Officers and Clerks",
+                "eligibility": "Graduates aged between 20–30 years can apply. Relaxations apply for reserved categories.",
+                "tutors": [
+                    "https://www.youtube.com/@Banking wallah",
+                    "https://www.youtube.com/@adda247",
+                    "https://www.youtube.com/@studyIQ",
+                    "https://www.youtube.com/@Bankersadda"
+                ]
+            },
+            "rbi": {
+                "fullForm": "Reserve Bank of India",
+                "description": "Serves as India's central bank, performing functions including currency issuance and managing foreign exchange.",
+                "eligibility": "Grade B officer typically requires 21-30 years and a bachelor's degree from a recognized university.",
+                "tutors": [
+                    "https://www.youtube.com/@TargetRBI",
+                    "https://www.youtube.com/@Edutap",
+                    "https://www.youtube.com/@adda247"
+                ]
+            },
+            "lic aao": {
+                "fullForm": "LIC Assistant Administrative Officer",
+                "description": "Conducted by LIC to recruit administrative officers in different cadres.",
+                "eligibility": "Graduates aged between 20–30 years can apply. Relaxations apply for reserved categories.",
+                "tutors": [
+                    "https://www.youtube.com/@adda247",
+                    "https://www.youtube.com/@Oliveboard",
+                    "https://www.youtube.com/@Guidely",
+                    "https://www.youtube.com/@InsuranceExamprep"
+                ]
+            },
+            "lic ado": {
+                "fullForm": "LIC Apprentice Development Officer",
+                "description": "Conducted by LIC to recruit administrative officers in different cadres.",
+                "eligibility": "Graduates aged between 20–30 years can apply. Relaxations apply for reserved categories.",
+                "tutors": [
+                    "https://www.youtube.com/@adda247",
+                    "https://www.youtube.com/@Oliveboard",
+                    "https://www.youtube.com/@InsuranceExamprep"
+                ]
+            },
+            "lic assistant": {
+                "fullForm": "LIC Assistant",
+                "description": "Conducted by LIC for clerical cadre.",
+                "eligibility": "Graduates aged between 20–30 years can apply. Relaxations apply for reserved categories.",
+                "tutors": [
+                    "https://www.youtube.com/@adda247",
+                    "https://www.youtube.com/@Oliveboard",
+                    "https://www.youtube.com/@InsuranceExamprep"
+                ]
+            },
+            "nda": {
+                "fullForm": "National Defence Academy",
+                "description": "It is a joint service academy of the Indian Armed Forces. Cadets of the Army, Navy, and Air Force.",
+                "eligibility": "Must be an Indian citizen, age limit between 16.5 to 19.5 years, 12th pass.",
+                "tutors": [
+                    "https://www.youtube.com/@Defencewallah",
+                    "https://www.youtube.com/@SSBCrackExams",
+                    "https://www.youtube.com/@DefenceAdda247",
+                    "https://www.youtube.com/@LearnwithSumit"
+                ]
+            },
+            "cds": {
+                "fullForm": "Combined Defence Services",
+                "description": "The CDS exam is conducted by UPSC twice a year to recruit officers into the armed forces, including the army, navy, and air force.",
+                "eligibility": "Must be an Indian citizen, age limit between 19-25 years, Graduates with mathematics and physics in 10+2.",
+                "tutors": [
+                    "https://www.youtube.com/@Defencewallah",
+                    "https://www.youtube.com/@SSBCrackExams",
+                    "https://www.youtube.com/@LearnwithSumit",
+                    "https://www.youtube.com/@DefenceAdda247"
+                ]
+            },
+            "capf": {
+                "fullForm": "Central Armed Police Forces",
+                "description": "The CAPF exam is conducted by UPSC once a year for the recruitment of Assistant Commandants.",
+                "eligibility": "Must be an Indian citizen with 20-25 years, Graduation degree from any recognized university.",
+                "tutors": [
+                    "https://www.youtube.com/@Defencewallah",
+                    "https://www.youtube.com/@DefenceAdda247",
+                    "https://www.youtube.com/@LearnwithSumit",
+                    "https://www.youtube.com/@SSBCrackExams"
+                ]
+            },
+            "jee mains and advanced": {
+                "fullForm": "Joint Entrance Examination",
+                "description": "Conducted by one of the IITs every year, required for admission into the Indian Institutes of Technology.",
+                "eligibility": "10+2",
+                "tutors": [
+                    "https://www.youtube.com/@PhysicsWallah",
+                    "https://www.youtube.com/@unacademyJEE",
+                    "https://www.youtube.com/@VedantuJEEMadeEjee"
+                ]
+            },
+            "neet ug": {
+                "fullForm": "National Eligibility cum Entrance Test Undergraduate",
+                "description": "It's the national exam for admission to undergraduate medical/dental and allied health courses (MBBS, BDS, AYUSH).",
+                "eligibility": "17 years old by 10+2.",
+                "tutors": [
+                    "https://www.youtube.com/@PhysicsWallah",
+                    "https://www.youtube.com/@unacademyNEET",
+                    "https://www.youtube.com/@NEETprep"
+                ]
+            },
+            "neet pg": {
+                "fullForm": "National Eligibility cum Entrance Test Postgraduate",
+                "description": "NEET PG is a national-level entrance exam conducted by the National Board of Medical Sciences (NBEMS).",
+                "eligibility": "Must hold an MBBS degree or Provisional MBBS pass Certificate.",
+                "tutors": [
+                    "https://www.youtube.com/@Let'sCrackNEETPG",
+                    "https://www.youtube.com/@DocTutorials-NEETPG|INICET"
+                ]
+            },
+            "cat": {
+                "fullForm": "Common Admission Test",
+                "description": "It is the national-level management entrance exam conducted by the Indian Institutes of Management (IIMs) on a rotational basis.",
+                "eligibility": "Bachelor's degree in any discipline from a recognized university.",
+                "tutors": [
+                    "https://www.youtube.com/@gateacademyCAT",
+                    "https://www.youtube.com/@CATKing"
+                ]
+            },
+            "xat": {
+                "fullForm": "Management Aptitude Test",
+                "description": "MAT is a national-level entrance exam conducted by AIMA for admissions into MBA/PGDM.",
+                "eligibility": "Bachelor's degree in any discipline from a recognized university.",
+                "tutors": [
+                    "https://www.youtube.com/@CATKing",
+                    "https://www.youtube.com/@IMSCATPrep",
+                    "https://www.youtube.com/@EduGorilla"
+                ]
+            },
+            "clat": {
+                "fullForm": "Common Law Admission Test",
+                "description": "CLAT is a national-level entrance exam for admissions into law programs in India.",
+                "eligibility": "Qualification of 10+2 from a recognized board.",
+                "tutors": [
+                    "https://www.youtube.com/@LawWallah",
+                    "https://www.youtube.com/@unacademyJudiciary"
+                ]
+            },
+            "ailet": {
+                "fullForm": "All India Law Entrance Test",
+                "description": "AILET is a national-level law entrance exam conducted by National Law University, Delhi.",
+                "eligibility": "Qualification of 10+2 from a recognized board.",
+                "tutors": [
+                    "https://www.youtube.com/@LawWallah",
+                    "https://www.youtube.com/@unacademyJudiciary"
+                ]
+            },
+            "isro": {
+                "fullForm": "Indian Space Research Organisation",
+                "description": "ISRO is India's national space agency, responsible for designing, building, and launching satellites.",
+                "eligibility": "B.E, B.Tech, M.Tech, MBA, M.Sc",
+                "tutors": [
+                    "https://www.youtube.com/@unacademyGATE",
+                    "https://www.youtube.com/@EasyElectronics",
+                    "https://www.youtube.com/@Ganitank"
+                ]
+            },
+            "drdo": {
+                "fullForm": "Defence Research and Development Organisation",
+                "description": "DRDO is India's premier research organization under the Ministry of Defence responsible for developing defence technologies.",
+                "eligibility": "B.E, B.Tech, M.Tech, MBA, M.Sc, PhD",
+                "tutors": [
+                    "https://www.youtube.com/@DRDOCEPTMOfficial",
+                    "https://www.youtube.com/@DRDOEXamPreparation",
+                    "https://www.youtube.com/@AjeetSir"
+                ]
+            },
+            "default": {
+                "fullForm": "Exam details will be updated soon",
+                "description": "We currently do not have information for this exam. It will be added shortly.",
+                "eligibility": "Eligibility criteria will be updated later.",
+                "tutors": ["Information will be added later."]
+            }
+        };
+
+        function searchExam() {
+            const input = document.getElementById('examInput').value.toLowerCase();
+            const detailsDiv = document.getElementById('examDetails');
+            const exam = exams[input] || exams["default"];
+            
+            // This line was corrected to use backticks (` `) for the template literal
+            const tutorLinks = exam.tutors.map(link => `<a href="${link}" target="_blank">${link}</a>`).join('<br>');
+            
+            detailsDiv.innerHTML = `
+                <h2>${exam.fullForm} (${input.toUpperCase()})</h2>
+                <p><strong>Description:</strong> ${exam.description}</p>
+                <p><strong>Eligibility:</strong> ${exam.eligibility}</p>
+                <p><strong>Tutors:</strong> ${tutorLinks}</p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
